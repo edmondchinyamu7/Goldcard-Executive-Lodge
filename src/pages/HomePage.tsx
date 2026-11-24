@@ -45,7 +45,6 @@ export function HomePage({
         onCurrencyChange={onCurrencyChange}
         selectedRoomId={selectedRoomId}
         onSelectRoom={handleSelectRoomFromHome}
-        placePhotos={placeData.photos}
         headerAction={
           <Link
             to="/accommodations"
@@ -58,8 +57,6 @@ export function HomePage({
       />
 
       <PlacePhotoGallery
-        photos={placeData.photos}
-        isLoading={placeData.isLoading}
         googleMapsUri={placeData.googleMapsUri}
         secondaryAction={
           <Link
@@ -73,7 +70,6 @@ export function HomePage({
       />
 
       <DiningAndGrounds
-        placePhotos={placeData.photos}
         headerAction={
           <div className="flex flex-wrap items-center gap-5">
             <Link

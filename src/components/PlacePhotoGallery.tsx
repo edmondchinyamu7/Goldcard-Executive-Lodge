@@ -1,53 +1,19 @@
 import { ReactNode, useState } from 'react';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { LODGE_INFO } from '../data/lodgeData';
-import { PlacePhotoItem } from '../hooks/useLodgePlaceData';
+import { LODGE_GALLERY_PHOTOS, LODGE_INFO } from '../data/lodgeData';
 import { SafeImage } from './SafeImage';
 
 interface PlacePhotoGalleryProps {
-  photos: PlacePhotoItem[];
-  isLoading: boolean;
   googleMapsUri: string | null;
   secondaryAction?: ReactNode;
 }
 
 export function PlacePhotoGallery({
-  photos,
-  isLoading,
   googleMapsUri,
   secondaryAction,
 }: PlacePhotoGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-
-  if (isLoading) {
-    return (
-      <section
-        id="gallery"
-        className="max-w-7xl mx-auto px-6 lg:px-10 py-14 border-b border-[#E5E2DC]"
-      >
-        <div className="flex items-baseline justify-between gap-4 mb-6">
-          <div className="space-y-1">
-            <p className="text-sm text-[#6E675C]">Property Gallery</p>
-            <h2 className="font-serif text-3xl font-medium text-[#171614]">
-              Photographs from the lodge listing
-            </h2>
-          </div>
-        </div>
-        <div className="grid lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-8 aspect-[16/10] rounded-lg bg-[#EDE9E0] animate-pulse" />
-          <div className="lg:col-span-4 grid grid-cols-2 gap-3">
-            {[0, 1, 2, 3].map((slot) => (
-              <div key={slot} className="aspect-[4/3] rounded-md bg-[#EDE9E0] animate-pulse" />
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (photos.length === 0) {
-    return null;
-  }
+  const photos = LODGE_GALLERY_PHOTOS;
 
   const safeIndex = activeIndex < photos.length ? activeIndex : 0;
   const activePhoto = photos[safeIndex];
@@ -91,58 +57,43 @@ export function PlacePhotoGallery({
         <div className="lg:col-span-8 space-y-3">
           <div className="relative aspect-[16/10] rounded-lg overflow-hidden border border-[#E5E2DC] bg-[#EDE9E0]">
             <SafeImage
-              src={activePhoto.heroUrl}
-              alt={`Goldcard Executive Lodge photograph ${safeIndex + 1} of ${photos.length}`}
-              fallbackLabel="Goldcard Executive Lodge"
-              className="w-full h-full object-cover"
+              src={activePhoto.src}
+              alt={`${activePhoto.title} — ${activePhoto.caption}`}
+              fallbackLabel={activePhoto.title}
+              className="w-full h-full object-cover object-center"
             />
-            {photos.length > 1 && (
-              <div className="absolute bottom-4 right-4 flex items-center gap-2">
-                <button
-                  type="button"
-                  aria-label="Previous lodge photograph"
-                  onClick={goPrev}
-                  className="w-10 h-10 rounded-md bg-[#FAF9F6]/95 border border-[#E5E2DC] text-[#171614] flex items-center justify-center hover:bg-[#FFFFFF] transition-colors cursor-pointer"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  type="button"
-                  aria-label="Next lodge photograph"
-                  onClick={goNext}
-                  className="w-10 h-10 rounded-md bg-[#FAF9F6]/95 border border-[#E5E2DC] text-[#171614] flex items-center justify-center hover:bg-[#FFFFFF] transition-colors cursor-pointer"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            )}
+            <div className="absolute bottom-4 right-4 flex items-center gap-2">
+              <button
+                type="button"
+                aria-label="Previous lodge photograph"
+                onClick={goPrev}
+                className="w-10 h-10 rounded-md bg-[#FAF9F6]/95 border border-[#E5E2DC] text-[#171614] flex items-center justify-center hover:bg-[#FFFFFF] transition-colors cursor-pointer"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                type="button"
+                aria-label="Next lodge photograph"
+                onClick={goNext}
+                className="w-10 h-10 rounded-md bg-[#FAF9F6]/95 border border-[#E5E2DC] text-[#171614] flex items-center justify-center hover:bg-[#FFFFFF] transition-colors cursor-pointer"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#6E675C]">
-            <span className="tabular-nums">
+          <div className="flex flex-wrap items-baseline justify-between gap-2 text-xs text-[#6E675C]">
+            <span className="font-medium text-[#171614]">
+              {activePhoto.title}
+              <span className="font-normal text-[#6E675C]"> — {activePhoto.caption}</span>
+            </span>
+            <span className="tabular-nums shrink-0">
               Photo {safeIndex + 1} of {photos.length}
             </span>
-            {activePhoto.authorName && (
-              <span>
-                Photo attribution:{' '}
-                {activePhoto.authorUri ? (
-                  <a
-                    href={activePhoto.authorUri}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-2 hover:text-[#171614]"
-                  >
-                    {activePhoto.authorName}
-                  </a>
-                ) : (
-                  activePhoto.authorName
-                )}
-              </span>
-            )}
           </div>
         </div>
 
-        <div className="lg:col-span-4 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-2 gap-3">
+        <div className="lg:col-span-4 grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-2 gap-3">
           {photos.map((photo, index) => {
             const isActive = index === safeIndex;
             return (
@@ -150,7 +101,7 @@ export function PlacePhotoGallery({
                 key={photo.id}
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                aria-label={`Select photograph ${index + 1}`}
+                aria-label={`Select ${photo.title}`}
                 className={`aspect-[4/3] rounded-md overflow-hidden border transition-all cursor-pointer bg-[#EDE9E0] ${
                   isActive
                     ? 'border-[#171614] ring-2 ring-[#9A7B3A]'
@@ -158,10 +109,10 @@ export function PlacePhotoGallery({
                 }`}
               >
                 <SafeImage
-                  src={photo.cardUrl}
-                  alt={`Goldcard Executive Lodge thumbnail ${index + 1}`}
-                  fallbackLabel={`Photo ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  src={photo.src}
+                  alt={photo.title}
+                  fallbackLabel={photo.title}
+                  className="w-full h-full object-cover object-center"
                 />
               </button>
             );

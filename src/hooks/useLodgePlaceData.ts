@@ -1,15 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMapsLibrary } from '@vis.gl/react-google-maps';
 
-export interface PlacePhotoItem {
-  id: string;
-  heroUrl: string;
-  cardUrl: string;
-  authorName: string | null;
-  authorUri: string | null;
-  googleMapsUri: string | null;
-}
-
 export interface LodgePlaceDetails {
   placeId: string | null;
   displayName: string | null;
@@ -19,7 +10,6 @@ export interface LodgePlaceDetails {
   userRatingCount: number | null;
   googleMapsUri: string | null;
   location: { lat: number; lng: number } | null;
-  photos: PlacePhotoItem[];
   isLoading: boolean;
   error: string | null;
 }
@@ -33,7 +23,6 @@ const INITIAL_STATE: LodgePlaceDetails = {
   userRatingCount: null,
   googleMapsUri: null,
   location: null,
-  photos: [],
   isLoading: true,
   error: null,
 };
@@ -77,7 +66,6 @@ export function useLodgePlaceData(enabled: boolean): LodgePlaceDetails {
             'displayName',
             'formattedAddress',
             'location',
-            'photos',
             'rating',
             'userRatingCount',
             'googleMapsURI',
@@ -100,18 +88,6 @@ export function useLodgePlaceData(enabled: boolean): LodgePlaceDetails {
           return;
         }
 
-        const mappedPhotos: PlacePhotoItem[] = (match.photos ?? []).slice(0, 10).map((photo, idx) => {
-          const primaryAttr = photo.authorAttributions?.[0];
-          return {
-            id: `${match.id ?? 'place'}-photo-${idx}`,
-            heroUrl: photo.getURI({ maxWidth: 1600 }),
-            cardUrl: photo.getURI({ maxWidth: 960 }),
-            authorName: primaryAttr?.displayName ?? null,
-            authorUri: primaryAttr?.uri ?? null,
-            googleMapsUri: photo.googleMapsURI ?? match.googleMapsURI ?? null,
-          };
-        });
-
         const coords = match.location
           ? { lat: match.location.lat(), lng: match.location.lng() }
           : null;
@@ -126,7 +102,6 @@ export function useLodgePlaceData(enabled: boolean): LodgePlaceDetails {
             typeof match.userRatingCount === 'number' ? match.userRatingCount : null,
           googleMapsUri: match.googleMapsURI ?? null,
           location: coords,
-          photos: mappedPhotos,
           isLoading: false,
           error: null,
         });
@@ -138,7 +113,7 @@ export function useLodgePlaceData(enabled: boolean): LodgePlaceDetails {
         setState((prev) => ({
           ...prev,
           isLoading: false,
-          error: 'Unable to load Google Places photos right now.',
+          error: 'Unable to load Google Places details right now.',
         }));
       }
     }

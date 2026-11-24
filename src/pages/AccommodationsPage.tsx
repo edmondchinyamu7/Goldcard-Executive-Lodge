@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { CurrencyCode, LODGE_INFO } from '../data/lodgeData';
-import { LodgePlaceDetails } from '../hooks/useLodgePlaceData';
 import { PageHeader } from '../components/PageHeader';
 import { Accommodations } from '../components/Accommodations';
 
@@ -9,7 +8,6 @@ interface AccommodationsPageProps {
   onCurrencyChange: (currency: CurrencyCode) => void;
   selectedRoomId: string;
   onSelectRoom: (roomId: string) => void;
-  placeData: LodgePlaceDetails;
 }
 
 const STAY_POLICIES = [
@@ -40,7 +38,6 @@ export function AccommodationsPage({
   onCurrencyChange,
   selectedRoomId,
   onSelectRoom,
-  placeData,
 }: AccommodationsPageProps) {
   const navigate = useNavigate();
 
@@ -62,7 +59,6 @@ export function AccommodationsPage({
         onCurrencyChange={onCurrencyChange}
         selectedRoomId={selectedRoomId}
         onSelectRoom={handleSelectAndReserve}
-        placePhotos={placeData.photos}
       />
 
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-14 lg:py-16">

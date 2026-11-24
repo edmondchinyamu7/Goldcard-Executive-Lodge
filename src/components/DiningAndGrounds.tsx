@@ -1,19 +1,17 @@
 import { ReactNode } from 'react';
-import { LODGE_INFO, LODGE_SERVICES } from '../data/lodgeData';
-import { PlacePhotoItem } from '../hooks/useLodgePlaceData';
+import {
+  DINING_BAR_PHOTO,
+  LODGE_INFO,
+  LODGE_SERVICES,
+  POOL_TERRACE_PHOTO,
+} from '../data/lodgeData';
 import { SafeImage } from './SafeImage';
-import lodgeDiningLoungeImg from '../assets/images/lodge_dining_lounge_1795506861988.jpg';
-import lodgePoolGardenImg from '../assets/images/lodge_pool_garden_1795506860325.jpg';
 
 interface DiningAndGroundsProps {
-  placePhotos: PlacePhotoItem[];
   headerAction?: ReactNode;
 }
 
-export function DiningAndGrounds({ placePhotos, headerAction }: DiningAndGroundsProps) {
-  const diningPhoto = placePhotos[5] ?? placePhotos[1];
-  const poolPhoto = placePhotos[6] ?? placePhotos[2];
-
+export function DiningAndGrounds({ headerAction }: DiningAndGroundsProps) {
   return (
     <section
       id="dining"
@@ -33,10 +31,10 @@ export function DiningAndGrounds({ placePhotos, headerAction }: DiningAndGrounds
         <article className="lg:col-span-2 bg-[#FFFFFF] border border-[#E5E2DC] rounded-lg overflow-hidden flex flex-col">
           <div className="aspect-[16/10] bg-[#EDE9E0] overflow-hidden">
             <SafeImage
-              src={diningPhoto?.heroUrl || lodgeDiningLoungeImg}
-              alt="Goldcard Executive Lodge restaurant and bar lounge"
+              src={DINING_BAR_PHOTO.src}
+              alt={DINING_BAR_PHOTO.alt}
               fallbackLabel="Lodge Restaurant & Lounge"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
           </div>
           <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between gap-4">
@@ -52,27 +50,8 @@ export function DiningAndGrounds({ placePhotos, headerAction }: DiningAndGrounds
                 early business breakfasts to unhurried evening meals and curated bar refreshments.
               </p>
             </div>
-            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#6E675C]">
-              <span>
-                Breakfast from 06:30 · À la carte lunch & dinner · In-room dining available
-              </span>
-              {diningPhoto?.authorName && (
-                <span>
-                  Photo by{' '}
-                  {diningPhoto.authorUri ? (
-                    <a
-                      href={diningPhoto.authorUri}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline underline-offset-2 hover:text-[#171614]"
-                    >
-                      {diningPhoto.authorName}
-                    </a>
-                  ) : (
-                    diningPhoto.authorName
-                  )}
-                </span>
-              )}
+            <div className="text-xs text-[#6E675C]">
+              Breakfast from 06:30 · À la carte lunch & dinner · In-room dining available
             </div>
           </div>
         </article>
@@ -80,10 +59,10 @@ export function DiningAndGrounds({ placePhotos, headerAction }: DiningAndGrounds
         <article className="lg:col-span-1 bg-[#FFFFFF] border border-[#E5E2DC] rounded-lg overflow-hidden flex flex-col">
           <div className="aspect-[4/3] lg:aspect-auto lg:h-64 bg-[#EDE9E0] overflow-hidden">
             <SafeImage
-              src={poolPhoto?.cardUrl || lodgePoolGardenImg}
-              alt="Outdoor swimming pool and garden terrace at Goldcard Executive Lodge"
+              src={POOL_TERRACE_PHOTO.src}
+              alt={POOL_TERRACE_PHOTO.alt}
               fallbackLabel="Courtyard Swimming Pool"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
           </div>
           <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between gap-4">
@@ -99,25 +78,8 @@ export function DiningAndGrounds({ placePhotos, headerAction }: DiningAndGrounds
                 calm retreat between appointments in Blantyre.
               </p>
             </div>
-            <div className="space-y-1 text-xs text-[#6E675C]">
+            <div className="text-xs text-[#6E675C]">
               <p>Poolside towels & beverage service</p>
-              {poolPhoto?.authorName && (
-                <p>
-                  Photo by{' '}
-                  {poolPhoto.authorUri ? (
-                    <a
-                      href={poolPhoto.authorUri}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline underline-offset-2 hover:text-[#171614]"
-                    >
-                      {poolPhoto.authorName}
-                    </a>
-                  ) : (
-                    poolPhoto.authorName
-                  )}
-                </p>
-              )}
             </div>
           </div>
         </article>

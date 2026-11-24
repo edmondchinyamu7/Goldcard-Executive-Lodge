@@ -1,12 +1,7 @@
 import { Link } from 'react-router-dom';
 import { LODGE_INFO } from '../data/lodgeData';
-import { LodgePlaceDetails } from '../hooks/useLodgePlaceData';
 import { PageHeader } from '../components/PageHeader';
 import { DiningAndGrounds } from '../components/DiningAndGrounds';
-
-interface DiningPageProps {
-  placeData: LodgePlaceDetails;
-}
 
 const DINING_SESSIONS = [
   {
@@ -32,7 +27,7 @@ const DINING_SESSIONS = [
   },
 ];
 
-export function DiningPage({ placeData }: DiningPageProps) {
+export function DiningPage() {
   return (
     <>
       <PageHeader
@@ -41,7 +36,7 @@ export function DiningPage({ placeData }: DiningPageProps) {
         description={`Open daily (${LODGE_INFO.diningHours}) for hotel guests and visiting colleagues in Namiwawa, paired with shaded poolside service.`}
       />
 
-      <DiningAndGrounds placePhotos={placeData.photos} />
+      <DiningAndGrounds />
 
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-14 lg:py-16">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">

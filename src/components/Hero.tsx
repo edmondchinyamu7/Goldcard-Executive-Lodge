@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
-import { LODGE_INFO } from '../data/lodgeData';
+import { HERO_LODGE_PHOTO, LODGE_INFO } from '../data/lodgeData';
 import { LodgePlaceDetails } from '../hooks/useLodgePlaceData';
 import { SafeImage } from './SafeImage';
-import heroLodgeExteriorImg from '../assets/images/hero_lodge_exterior_1795506858491.jpg';
 
 interface HeroProps {
   onReserveClick: () => void;
@@ -11,9 +10,6 @@ interface HeroProps {
 }
 
 export function Hero({ onReserveClick, placeData }: HeroProps) {
-  const leadPhoto = placeData.photos[3] ?? placeData.photos[0];
-  const heroSrc = leadPhoto?.heroUrl || heroLodgeExteriorImg;
-
   const propertyMetrics = [
     {
       figure: '04',
@@ -92,29 +88,12 @@ export function Hero({ onReserveClick, placeData }: HeroProps) {
         <div className="lg:col-span-7 flex flex-col gap-2">
           <div className="flex-1 min-h-[300px] lg:min-h-[470px] rounded-lg overflow-hidden border border-[#E5E2DC] bg-[#EDE9E0]">
             <SafeImage
-              src={heroSrc}
-              alt="Goldcard Executive Lodge in Namiwawa, Blantyre"
+              src={HERO_LODGE_PHOTO.src}
+              alt={HERO_LODGE_PHOTO.alt}
               fallbackLabel="Goldcard Executive Lodge"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
           </div>
-          {leadPhoto?.authorName && (
-            <p className="text-xs text-[#6E675C] text-right">
-              Photo by{' '}
-              {leadPhoto.authorUri ? (
-                <a
-                  href={leadPhoto.authorUri}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-2 hover:text-[#171614]"
-                >
-                  {leadPhoto.authorName}
-                </a>
-              ) : (
-                leadPhoto.authorName
-              )}
-            </p>
-          )}
         </div>
       </div>
 

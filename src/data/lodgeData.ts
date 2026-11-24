@@ -1,8 +1,22 @@
-import suiteExecutiveImg from '../assets/images/suite_executive_1795506859799.jpg';
-import roomSuperiorImg from '../assets/images/room_superior_1795506860091.jpg';
-import superiorLodgeRoomImg from '../assets/images/superior_lodge_room_1795507617463.jpg';
+import lobbyHallwayImg from '../assets/images/unnamed.webp';
+import poolEveningImg from '../assets/images/unnamed (1).webp';
+import poolDayImg from '../assets/images/unnamed (2).webp';
+import heroWelcomeTeamImg from '../assets/images/unnamed (3).webp';
+import suiteDeskLoungeImg from '../assets/images/unnamed (4).webp';
+import superiorRoomBedroomImg from '../assets/images/unnamed (5).webp';
+import barLoungeImg from '../assets/images/unnamed (6).webp';
+import twinGuestRoomImg from '../assets/images/unnamed (7).webp';
+import boardroomImg from '../assets/images/unnamed (8).webp';
+import exteriorDrivewayImg from '../assets/images/unnamed (9).webp';
 
 export type CurrencyCode = 'USD' | 'MWK';
+
+export interface LodgePhoto {
+  id: string;
+  src: string;
+  title: string;
+  caption: string;
+}
 
 export interface RoomTier {
   id: string;
@@ -28,6 +42,89 @@ export interface LodgeService {
   hours: string;
 }
 
+export const HERO_LODGE_PHOTO = {
+  src: heroWelcomeTeamImg,
+  alt: 'Goldcard Executive Lodge hospitality team welcoming guests at the main Namiwawa entrance',
+};
+
+export const DINING_BAR_PHOTO = {
+  src: barLoungeImg,
+  alt: 'Stocked bar counter and seating inside the Goldcard Executive Lodge lounge',
+};
+
+export const POOL_TERRACE_PHOTO = {
+  src: poolDayImg,
+  alt: 'Outdoor swimming pool and shaded garden terrace at Goldcard Executive Lodge',
+};
+
+export const BOARDROOM_PHOTO = {
+  src: boardroomImg,
+  alt: 'Executive conference and boardroom table at Goldcard Executive Lodge',
+};
+
+export const LODGE_GALLERY_PHOTOS: LodgePhoto[] = [
+  {
+    id: 'welcome-entrance',
+    src: heroWelcomeTeamImg,
+    title: 'Main Entrance & Welcome Team',
+    caption: 'Our lodge hospitality team welcoming guests beneath the main entrance portico.',
+  },
+  {
+    id: 'superior-room',
+    src: superiorRoomBedroomImg,
+    title: 'Superior Guest Bedroom',
+    caption: 'Curved timber-and-leather bed frame with crisp white linens and draped canopy.',
+  },
+  {
+    id: 'executive-suite',
+    src: suiteDeskLoungeImg,
+    title: 'Executive Suite',
+    caption: 'Carved wooden headboard, private writing desk, leather sofa, and in-room fridge.',
+  },
+  {
+    id: 'twin-standard-room',
+    src: twinGuestRoomImg,
+    title: 'Twin Guest Room',
+    caption: 'Two individual beds with patterned linens and a dedicated guest mini-fridge.',
+  },
+  {
+    id: 'pool-daytime',
+    src: poolDayImg,
+    title: 'Courtyard Swimming Pool',
+    caption: 'Sunlit outdoor swimming pool framed by red brick coping and covered seating.',
+  },
+  {
+    id: 'pool-evening',
+    src: poolEveningImg,
+    title: 'Evening Poolside Courtyard',
+    caption: 'Warm string lights across the garden bar terrace and pool after dusk.',
+  },
+  {
+    id: 'bar-lounge',
+    src: barLoungeImg,
+    title: 'Executive Bar & Lounge',
+    caption: 'Full-service wooden bar counter with chilled beverages and evening refreshments.',
+  },
+  {
+    id: 'arched-lobby',
+    src: lobbyHallwayImg,
+    title: 'Arched Lobby Corridor',
+    caption: 'Sunlit interior colonnade with coffered timber ceiling, chandelier, and greenery.',
+  },
+  {
+    id: 'executive-boardroom',
+    src: boardroomImg,
+    title: 'Executive Boardroom',
+    caption: 'Private conference table, leather seating, and presentation screen for meetings.',
+  },
+  {
+    id: 'lodge-exterior',
+    src: exteriorDrivewayImg,
+    title: 'Driveway & Portico Arrival',
+    caption: 'Gated compound arrival driveway and arched facade off Mombo Road in Namiwawa.',
+  },
+];
+
 export const LODGE_INFO = {
   name: 'Goldcard Executive Lodge',
   shortLocation: 'Mombo Road · Namiwawa, Blantyre',
@@ -48,21 +145,22 @@ export const ROOM_TIERS: RoomTier[] = [
     index: '01',
     name: 'Executive Suite',
     category: 'executive',
-    bedType: 'King Bed',
+    bedType: 'Queen Bed & Lounge',
     sizeSqm: 48,
     view: 'Pool & Garden View',
     maxGuests: 2,
     rateUsd: 135,
     rateMwk: 235000,
-    image: suiteExecutiveImg,
+    image: suiteDeskLoungeImg,
+    imageFocus: 'object-center',
     summary:
-      'Designed for extended executive stays with a dedicated study desk, private garden terrace access, and serene timber-and-stone interiors.',
+      'Designed for extended executive stays with a carved timber headboard, dedicated study desk, leather lounge seating, and in-room refrigerator.',
     amenities: [
-      'Private work desk & ergonomic seating',
+      'Private work desk & study chair',
+      'Leather lounge seating & coffee table',
+      'In-room refrigerator & kettle',
       'Complimentary high-speed Wi-Fi',
-      'Air conditioning & ceiling fan',
-      'En-suite walk-in rainfall shower',
-      'Tea & Malawian coffee station',
+      'Air conditioning & mosquito canopy',
       'Daily housekeeping & laundry service',
     ],
   },
@@ -77,15 +175,15 @@ export const ROOM_TIERS: RoomTier[] = [
     maxGuests: 1,
     rateUsd: 105,
     rateMwk: 185000,
-    image: roomSuperiorImg,
-    imageFocus: 'object-right',
+    image: suiteDeskLoungeImg,
+    imageFocus: 'object-left',
     summary:
-      'Tailored for solo business travelers seeking quiet focus in Namiwawa, just minutes from Blantyre CBD offices and diplomatic missions.',
+      'Tailored for solo business travelers seeking quiet desk workspace in Namiwawa, minutes from Blantyre CBD offices and diplomatic missions.',
     amenities: [
       'Writing desk with power & task lamp',
       'Complimentary high-speed Wi-Fi',
-      'Air conditioning',
-      'Flat-screen satellite television',
+      'In-room refrigerator & tea station',
+      'Direct-dial telephone',
       'Breakfast included at the lodge restaurant',
       '24-hour room service access',
     ],
@@ -95,44 +193,44 @@ export const ROOM_TIERS: RoomTier[] = [
     index: '03',
     name: 'Superior Room',
     category: 'standard',
-    bedType: 'Queen Bed',
-    sizeSqm: 30,
+    bedType: 'King Bed',
+    sizeSqm: 32,
     view: 'Garden Walk',
     maxGuests: 2,
     rateUsd: 88,
     rateMwk: 155000,
-    image: superiorLodgeRoomImg,
+    image: superiorRoomBedroomImg,
     imageFocus: 'object-center',
     summary:
-      'Warm stone textures, crisp cotton linens, and direct access to shaded courtyard pathways leading toward the outdoor swimming pool.',
+      'Curved timber-and-cream-leather king bed dressed in crisp white cotton linens, warm drapery, bedside lamps, and direct courtyard access.',
     amenities: [
-      'Queen bed with breathable cotton bedding',
+      'King bed with crisp cotton linens',
+      'Draped mosquito canopy & warm drapery',
       'Complimentary high-speed Wi-Fi',
-      'Air conditioning',
       'En-suite bathroom with fresh towels',
-      'In-room safe & wardrobe',
+      'Bedside telephone & wardrobe',
       'Private secure parking included',
     ],
   },
   {
     id: 'standard-room',
     index: '04',
-    name: 'Standard Room',
+    name: 'Standard Twin Room',
     category: 'standard',
-    bedType: 'Double Bed',
-    sizeSqm: 24,
+    bedType: 'Twin Beds',
+    sizeSqm: 26,
     view: 'Namiwawa Grounds',
     maxGuests: 2,
     rateUsd: 72,
     rateMwk: 125000,
-    image: suiteExecutiveImg,
-    imageFocus: 'object-left',
+    image: twinGuestRoomImg,
+    imageFocus: 'object-center',
     summary:
-      'A calm, well-proportioned sanctuary for overnight stays and weekend visits in Blantyre, supported by full 24-hour front desk care.',
+      'A calm twin-bed sanctuary for colleagues or overnight visitors in Blantyre, complete with central mini-fridge and 24-hour front desk support.',
     amenities: [
-      'Double bed with crisp linens',
+      'Two single beds with crisp linens',
+      'In-room refrigerator',
       'Complimentary Wi-Fi',
-      'Climate control',
       'En-suite shower',
       '24-hour front desk support',
       'On-site laundry availability',

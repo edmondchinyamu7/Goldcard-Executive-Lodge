@@ -58,12 +58,11 @@ function LodgeRoutes({ mapsAvailable }: { mapsAvailable: boolean }) {
                 onCurrencyChange={setCurrency}
                 selectedRoomId={selectedRoomId}
                 onSelectRoom={setSelectedRoomId}
-                placeData={placeData}
               />
             }
           />
           <Route path="/gallery" element={<GalleryPage placeData={placeData} />} />
-          <Route path="/dining" element={<DiningPage placeData={placeData} />} />
+          <Route path="/dining" element={<DiningPage />} />
           <Route path="/amenities" element={<AmenitiesPage />} />
           <Route
             path="/location"
