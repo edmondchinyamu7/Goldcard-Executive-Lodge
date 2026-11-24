@@ -1,5 +1,6 @@
 import suiteExecutiveImg from '../assets/images/suite_executive_1795506859799.jpg';
 import roomSuperiorImg from '../assets/images/room_superior_1795506860091.jpg';
+import superiorLodgeRoomImg from '../assets/images/superior_lodge_room_1795507617463.jpg';
 
 export type CurrencyCode = 'USD' | 'MWK';
 
@@ -100,7 +101,7 @@ export const ROOM_TIERS: RoomTier[] = [
     maxGuests: 2,
     rateUsd: 88,
     rateMwk: 155000,
-    image: roomSuperiorImg,
+    image: superiorLodgeRoomImg,
     imageFocus: 'object-center',
     summary:
       'Warm stone textures, crisp cotton linens, and direct access to shaded courtyard pathways leading toward the outdoor swimming pool.',

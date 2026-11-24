@@ -1,9 +1,17 @@
 import { LODGE_INFO, LODGE_SERVICES } from '../data/lodgeData';
+import { PlacePhotoItem } from '../hooks/useLodgePlaceData';
 import { SafeImage } from './SafeImage';
 import lodgeDiningLoungeImg from '../assets/images/lodge_dining_lounge_1795506861988.jpg';
 import lodgePoolGardenImg from '../assets/images/lodge_pool_garden_1795506860325.jpg';
 
-export function DiningAndGrounds() {
+interface DiningAndGroundsProps {
+  placePhotos: PlacePhotoItem[];
+}
+
+export function DiningAndGrounds({ placePhotos }: DiningAndGroundsProps) {
+  const diningPhoto = placePhotos[5] ?? placePhotos[1];
+  const poolPhoto = placePhotos[6] ?? placePhotos[2];
+
   return (
     <section
       id="dining"
@@ -20,8 +28,8 @@ export function DiningAndGrounds() {
         <article className="lg:col-span-2 bg-[#FFFFFF] border border-[#E5E2DC] rounded-lg overflow-hidden flex flex-col">
           <div className="aspect-[16/10] bg-[#EDE9E0] overflow-hidden">
             <SafeImage
-              src={lodgeDiningLoungeImg}
-              alt="Goldcard Executive Lodge restaurant and bar lounge set with oak tables and warm lighting"
+              src={diningPhoto?.heroUrl || lodgeDiningLoungeImg}
+              alt="Goldcard Executive Lodge restaurant and bar lounge"
               fallbackLabel="Lodge Restaurant & Lounge"
               className="w-full h-full object-cover"
             />
@@ -39,17 +47,36 @@ export function DiningAndGrounds() {
                 early business breakfasts to unhurried evening meals and curated bar refreshments.
               </p>
             </div>
-            <p className="text-xs text-[#6E675C]">
-              Breakfast from 06:30 · À la carte lunch & dinner · In-room dining available
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#6E675C]">
+              <span>
+                Breakfast from 06:30 · À la carte lunch & dinner · In-room dining available
+              </span>
+              {diningPhoto?.authorName && (
+                <span>
+                  Photo by{' '}
+                  {diningPhoto.authorUri ? (
+                    <a
+                      href={diningPhoto.authorUri}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2 hover:text-[#171614]"
+                    >
+                      {diningPhoto.authorName}
+                    </a>
+                  ) : (
+                    diningPhoto.authorName
+                  )}
+                </span>
+              )}
+            </div>
           </div>
         </article>
 
         <article className="lg:col-span-1 bg-[#FFFFFF] border border-[#E5E2DC] rounded-lg overflow-hidden flex flex-col">
           <div className="aspect-[4/3] lg:aspect-auto lg:h-64 bg-[#EDE9E0] overflow-hidden">
             <SafeImage
-              src={lodgePoolGardenImg}
-              alt="Outdoor swimming pool surrounded by lush garden palms and stone deck at Goldcard Executive Lodge"
+              src={poolPhoto?.cardUrl || lodgePoolGardenImg}
+              alt="Outdoor swimming pool and garden terrace at Goldcard Executive Lodge"
               fallbackLabel="Courtyard Swimming Pool"
               className="w-full h-full object-cover"
             />
@@ -67,7 +94,26 @@ export function DiningAndGrounds() {
                 calm retreat between appointments in Blantyre.
               </p>
             </div>
-            <p className="text-xs text-[#6E675C]">Poolside towels & beverage service</p>
+            <div className="space-y-1 text-xs text-[#6E675C]">
+              <p>Poolside towels & beverage service</p>
+              {poolPhoto?.authorName && (
+                <p>
+                  Photo by{' '}
+                  {poolPhoto.authorUri ? (
+                    <a
+                      href={poolPhoto.authorUri}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2 hover:text-[#171614]"
+                    >
+                      {poolPhoto.authorName}
+                    </a>
+                  ) : (
+                    poolPhoto.authorName
+                  )}
+                </p>
+              )}
+            </div>
           </div>
         </article>
       </div>

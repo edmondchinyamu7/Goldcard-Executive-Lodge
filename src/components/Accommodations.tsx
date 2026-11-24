@@ -7,6 +7,7 @@ import {
   RoomTier,
   formatRoomRate,
 } from '../data/lodgeData';
+import { PlacePhotoItem } from '../hooks/useLodgePlaceData';
 import { SafeImage } from './SafeImage';
 
 interface AccommodationsProps {
@@ -14,6 +15,7 @@ interface AccommodationsProps {
   onCurrencyChange: (currency: CurrencyCode) => void;
   selectedRoomId: string;
   onSelectRoom: (roomId: string) => void;
+  placePhotos: PlacePhotoItem[];
 }
 
 type FilterOption = 'all' | 'executive' | 'standard';
@@ -23,9 +25,13 @@ export function Accommodations({
   onCurrencyChange,
   selectedRoomId,
   onSelectRoom,
+  placePhotos,
 }: AccommodationsProps) {
   const [filter, setFilter] = useState<FilterOption>('all');
-  const [inspectingRoom, setInspectingRoom] = useState<RoomTier | null>(null);
+  const [inspectingRoom, setInspectingRoom] = useState<{
+    room: RoomTier;
+    photo?: PlacePhotoItem;
+  } | null>(null);
 
   const visibleRooms = ROOM_TIERS.filter((room) => {
     if (filter === 'all') return true;
@@ -108,6 +114,15 @@ export function Accommodations({
       <div className="grid md:grid-cols-2 gap-8">
         {visibleRooms.map((room) => {
           const isSelected = selectedRoomId === room.id;
+          const placePhotoByRoom: Record<string, PlacePhotoItem | undefined> = {
+            'executive-suite': placePhotos[1] ?? placePhotos[0],
+            'executive-single': placePhotos[2] ?? placePhotos[0],
+            'superior-room': undefined,
+            'standard-room': placePhotos[4] ?? placePhotos[0],
+          };
+          const placePhoto = placePhotoByRoom[room.id];
+          const cardImage = placePhoto?.cardUrl || room.image;
+
           return (
             <article
               key={room.id}
@@ -117,15 +132,15 @@ export function Accommodations({
             >
               <button
                 type="button"
-                onClick={() => setInspectingRoom(room)}
+                onClick={() => setInspectingRoom({ room, photo: placePhoto })}
                 className="block w-full aspect-[4/3] overflow-hidden bg-[#EDE9E0] text-left cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9A7B3A]"
               >
                 <SafeImage
-                  src={room.image}
-                  alt={`${room.name} interior at Goldcard Executive Lodge`}
+                  src={cardImage}
+                  alt={`${room.name} at Goldcard Executive Lodge`}
                   fallbackLabel={room.name}
                   className={`w-full h-full object-cover ${
-                    room.imageFocus || 'object-center'
+                    placePhoto ? 'object-center' : room.imageFocus || 'object-center'
                   } transition-transform duration-300 group-hover:scale-[1.02]`}
                 />
               </button>
@@ -151,6 +166,24 @@ export function Accommodations({
                   <p className="text-xs text-[#6E675C] pt-1">
                     {room.amenities.slice(0, 3).join(' · ')}
                   </p>
+
+                  {placePhoto?.authorName && (
+                    <p className="text-xs text-[#8A8276]">
+                      Photo by{' '}
+                      {placePhoto.authorUri ? (
+                        <a
+                          href={placePhoto.authorUri}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline underline-offset-2 hover:text-[#171614]"
+                        >
+                          {placePhoto.authorName}
+                        </a>
+                      ) : (
+                        placePhoto.authorName
+                      )}
+                    </p>
+                  )}
                 </div>
 
                 <div className="pt-5 border-t border-[#EFECE6] flex items-center justify-between gap-4">
@@ -164,7 +197,7 @@ export function Accommodations({
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
-                      onClick={() => setInspectingRoom(room)}
+                      onClick={() => setInspectingRoom({ room, photo: placePhoto })}
                       className="px-3.5 py-2.5 text-sm font-medium text-[#57524A] hover:text-[#171614] underline underline-offset-4 decoration-[#D4CEC3] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       Room Details
@@ -203,12 +236,10 @@ export function Accommodations({
           >
             <div className="relative aspect-[16/9] bg-[#EDE9E0]">
               <SafeImage
-                src={inspectingRoom.image}
-                alt={inspectingRoom.name}
-                fallbackLabel={inspectingRoom.name}
-                className={`w-full h-full object-cover ${
-                  inspectingRoom.imageFocus || 'object-center'
-                }`}
+                src={inspectingRoom.photo?.heroUrl || inspectingRoom.room.image}
+                alt={inspectingRoom.room.name}
+                fallbackLabel={inspectingRoom.room.name}
+                className="w-full h-full object-cover object-center"
               />
               <button
                 type="button"
@@ -224,35 +255,53 @@ export function Accommodations({
               <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
                 <div>
                   <p className="text-xs text-[#6E675C] tabular-nums">
-                    {inspectingRoom.index} · {inspectingRoom.bedType} · {inspectingRoom.sizeSqm} m² ·{' '}
-                    Up to {inspectingRoom.maxGuests}{' '}
-                    {inspectingRoom.maxGuests === 1 ? 'guest' : 'guests'}
+                    {inspectingRoom.room.index} · {inspectingRoom.room.bedType} ·{' '}
+                    {inspectingRoom.room.sizeSqm} m² · Up to {inspectingRoom.room.maxGuests}{' '}
+                    {inspectingRoom.room.maxGuests === 1 ? 'guest' : 'guests'}
                   </p>
                   <h3
                     id="room-modal-title"
                     className="font-serif text-3xl font-medium text-[#171614] mt-1"
                   >
-                    {inspectingRoom.name}
+                    {inspectingRoom.room.name}
                   </h3>
                 </div>
                 <div className="text-left sm:text-right">
                   <span className="font-serif text-2xl font-medium text-[#171614] tabular-nums">
-                    {formatRoomRate(inspectingRoom, currency)}
+                    {formatRoomRate(inspectingRoom.room, currency)}
                   </span>
                   <span className="text-xs text-[#6E675C] ml-1">/ night</span>
                 </div>
               </div>
 
               <p className="text-sm sm:text-base leading-relaxed text-[#4A453E]">
-                {inspectingRoom.summary}
+                {inspectingRoom.room.summary}
               </p>
+
+              {inspectingRoom.photo?.authorName && (
+                <p className="text-xs text-[#6E675C]">
+                  Photo by{' '}
+                  {inspectingRoom.photo.authorUri ? (
+                    <a
+                      href={inspectingRoom.photo.authorUri}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2 hover:text-[#171614]"
+                    >
+                      {inspectingRoom.photo.authorName}
+                    </a>
+                  ) : (
+                    inspectingRoom.photo.authorName
+                  )}
+                </p>
+              )}
 
               <div className="border-t border-[#E5E2DC] pt-5">
                 <h4 className="text-sm font-medium text-[#171614] mb-3">
                   Included in this room
                 </h4>
                 <ul className="grid sm:grid-cols-2 gap-2.5 text-sm text-[#4A453E]">
-                  {inspectingRoom.amenities.map((amenity) => (
+                  {inspectingRoom.room.amenities.map((amenity) => (
                     <li key={amenity} className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#9A7B3A] mt-0.5 shrink-0" aria-hidden="true" />
                       <span>{amenity}</span>
@@ -267,10 +316,10 @@ export function Accommodations({
                 </p>
                 <button
                   type="button"
-                  onClick={() => handleChooseRoom(inspectingRoom.id)}
+                  onClick={() => handleChooseRoom(inspectingRoom.room.id)}
                   className="px-6 py-2.5 text-sm font-medium bg-[#171614] text-[#FAF9F6] hover:bg-[#2B2925] rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                 >
-                  Reserve {inspectingRoom.name}
+                  Reserve {inspectingRoom.room.name}
                 </button>
               </div>
             </div>

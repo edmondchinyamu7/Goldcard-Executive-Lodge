@@ -8,8 +8,8 @@ interface NavbarProps {
 
 const NAV_LINKS = [
   { label: 'Accommodations', href: '#accommodations' },
+  { label: 'Gallery', href: '#gallery' },
   { label: 'Dining', href: '#dining' },
-  { label: 'Amenities', href: '#amenities' },
   { label: 'Location', href: '#reserve' },
 ];
 

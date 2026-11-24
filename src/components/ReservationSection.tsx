@@ -7,11 +7,15 @@ import {
   ROOM_TIERS,
   formatRoomRate,
 } from '../data/lodgeData';
+import { LodgePlaceDetails } from '../hooks/useLodgePlaceData';
+import { LodgeMap } from './LodgeMap';
 
 interface ReservationSectionProps {
   selectedRoomId: string;
   onSelectRoom: (roomId: string) => void;
   currency: CurrencyCode;
+  placeData: LodgePlaceDetails;
+  mapsAvailable: boolean;
 }
 
 interface BookingReceipt {
@@ -37,6 +41,8 @@ export function ReservationSection({
   selectedRoomId,
   onSelectRoom,
   currency,
+  placeData,
+  mapsAvailable,
 }: ReservationSectionProps) {
   const today = useMemo(() => new Date(), []);
   const [checkIn, setCheckIn] = useState(() => addDaysIso(today, 2));
@@ -51,6 +57,10 @@ export function ReservationSection({
 
   const selectedRoom =
     ROOM_TIERS.find((room) => room.id === selectedRoomId) ?? ROOM_TIERS[0];
+
+  const displayAddress = placeData.formattedAddress || LODGE_INFO.fullAddress;
+  const displayPhone = placeData.nationalPhoneNumber || LODGE_INFO.phone;
+  const displayMapsUrl = placeData.googleMapsUri || LODGE_INFO.googleShareUrl;
 
   const nights = useMemo(() => {
     const start = new Date(checkIn);
@@ -112,7 +122,7 @@ export function ReservationSection({
   return (
     <section id="reserve" className="max-w-7xl mx-auto px-6 lg:px-10 py-16 lg:py-20">
       <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-        <div className="lg:col-span-5 space-y-8">
+        <div className="lg:col-span-5 space-y-6">
           <div className="space-y-3">
             <p className="text-sm text-[#6E675C]">Location & Direct Reservations</p>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#171614] text-balance">
@@ -124,12 +134,20 @@ export function ReservationSection({
             </p>
           </div>
 
+          {mapsAvailable && placeData.location && (
+            <LodgeMap
+              center={placeData.location}
+              placeName={placeData.displayName || LODGE_INFO.name}
+              address={displayAddress}
+            />
+          )}
+
           <div className="bg-[#FFFFFF] border border-[#E5E2DC] rounded-lg p-6 space-y-5">
             <div className="flex items-start gap-3">
               <MapPin className="w-5 h-5 text-[#9A7B3A] mt-0.5 shrink-0" aria-hidden="true" />
               <div className="space-y-1">
                 <div className="text-sm font-medium text-[#171614]">Address</div>
-                <p className="text-sm text-[#4A453E]">{LODGE_INFO.fullAddress}</p>
+                <p className="text-sm text-[#4A453E]">{displayAddress}</p>
               </div>
             </div>
 
@@ -138,17 +156,17 @@ export function ReservationSection({
               <div className="space-y-1">
                 <div className="text-sm font-medium text-[#171614]">24-Hour Front Desk</div>
                 <a
-                  href={LODGE_INFO.phoneHref}
+                  href={`tel:${displayPhone.replace(/\s+/g, '')}`}
                   className="text-sm text-[#171614] hover:text-[#9A7B3A] underline underline-offset-4 decoration-[#D4CEC3] tabular-nums"
                 >
-                  {LODGE_INFO.phone}
+                  {displayPhone}
                 </a>
               </div>
             </div>
 
             <div className="pt-4 border-t border-[#EFECE6]">
               <a
-                href={LODGE_INFO.googleShareUrl}
+                href={displayMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border border-[#171614] text-[#171614] hover:bg-[#171614] hover:text-[#FAF9F6] rounded-md transition-colors duration-150 whitespace-nowrap"
@@ -192,10 +210,10 @@ export function ReservationSection({
                       Our 24-hour front desk has logged your stay details for confirmation. For
                       immediate arrival assistance, call{' '}
                       <a
-                        href={LODGE_INFO.phoneHref}
+                        href={`tel:${displayPhone.replace(/\s+/g, '')}`}
                         className="font-medium text-[#171614] underline underline-offset-4"
                       >
-                        {LODGE_INFO.phone}
+                        {displayPhone}
                       </a>
                       .
                     </p>
@@ -241,7 +259,7 @@ export function ReservationSection({
                     Submit Another Request
                   </button>
                   <a
-                    href={LODGE_INFO.googleShareUrl}
+                    href={displayMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-[#171614] hover:text-[#9A7B3A] underline underline-offset-4"
