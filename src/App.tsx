@@ -13,7 +13,10 @@ import { AmenitiesPage } from './pages/AmenitiesPage';
 import { LocationPage } from './pages/LocationPage';
 import { ReservePage } from './pages/ReservePage';
 
-const API_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined) || '';
+const API_KEY =
+  (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined) ||
+  (globalThis as { GOOGLE_MAPS_API_KEY?: string }).GOOGLE_MAPS_API_KEY ||
+  '';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
