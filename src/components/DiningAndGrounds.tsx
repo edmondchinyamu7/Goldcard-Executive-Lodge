@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { LODGE_INFO, LODGE_SERVICES } from '../data/lodgeData';
 import { PlacePhotoItem } from '../hooks/useLodgePlaceData';
 import { SafeImage } from './SafeImage';
@@ -6,9 +7,10 @@ import lodgePoolGardenImg from '../assets/images/lodge_pool_garden_1795506860325
 
 interface DiningAndGroundsProps {
   placePhotos: PlacePhotoItem[];
+  headerAction?: ReactNode;
 }
 
-export function DiningAndGrounds({ placePhotos }: DiningAndGroundsProps) {
+export function DiningAndGrounds({ placePhotos, headerAction }: DiningAndGroundsProps) {
   const diningPhoto = placePhotos[5] ?? placePhotos[1];
   const poolPhoto = placePhotos[6] ?? placePhotos[2];
 
@@ -17,11 +19,14 @@ export function DiningAndGrounds({ placePhotos }: DiningAndGroundsProps) {
       id="dining"
       className="max-w-7xl mx-auto px-6 lg:px-10 py-16 lg:py-20 border-b border-[#E5E2DC]"
     >
-      <div className="max-w-2xl space-y-2 mb-10">
-        <p className="text-sm text-[#6E675C]">Dining & Grounds</p>
-        <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#171614] text-balance">
-          From morning breakfast service to quiet evenings by the pool.
-        </h2>
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-10">
+        <div className="max-w-2xl space-y-2">
+          <p className="text-sm text-[#6E675C]">Dining & Grounds</p>
+          <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#171614] text-balance">
+            From morning breakfast service to quiet evenings by the pool.
+          </h2>
+        </div>
+        {headerAction}
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6 items-stretch">

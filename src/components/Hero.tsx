@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { LODGE_INFO } from '../data/lodgeData';
 import { LodgePlaceDetails } from '../hooks/useLodgePlaceData';
@@ -14,17 +15,34 @@ export function Hero({ onReserveClick, placeData }: HeroProps) {
   const heroSrc = leadPhoto?.heroUrl || heroLodgeExteriorImg;
 
   const propertyMetrics = [
-    { figure: '04', label: 'Accommodation Tiers' },
-    { figure: '24 hrs', label: 'Front Desk & Security' },
+    {
+      figure: '04',
+      label: 'Accommodation Tiers',
+      to: '/accommodations',
+    },
+    {
+      figure: '24 hrs',
+      label: 'Front Desk & Security',
+      to: '/amenities',
+    },
     placeData.rating !== null
       ? {
           figure: `${placeData.rating.toFixed(1)} / 5`,
           label: placeData.userRatingCount
             ? `Google Rating (${placeData.userRatingCount} reviews)`
             : 'Google Maps Rating',
+          to: '/location',
         }
-      : { figure: '3.5 km', label: 'North of Blantyre CBD' },
-    { figure: 'Pool & Dining', label: 'Private Garden Grounds' },
+      : {
+          figure: '3.5 km',
+          label: 'North of Blantyre CBD',
+          to: '/location',
+        },
+    {
+      figure: 'Pool & Dining',
+      label: 'Private Garden Grounds',
+      to: '/dining',
+    },
   ];
 
   return (
@@ -53,13 +71,19 @@ export function Hero({ onReserveClick, placeData }: HeroProps) {
             >
               Reserve Your Room
             </button>
+            <Link
+              to="/accommodations"
+              className="text-sm font-medium text-[#171614] hover:text-[#8A6A28] underline underline-offset-4 decoration-[#D4CEC3] hover:decoration-[#9A7B3A] transition-colors whitespace-nowrap shrink-0 py-2"
+            >
+              Explore Rooms
+            </Link>
             <a
               href={placeData.googleMapsUri || LODGE_INFO.googleShareUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-[#171614] hover:text-[#8A6A28] underline underline-offset-4 decoration-[#D4CEC3] hover:decoration-[#9A7B3A] transition-colors whitespace-nowrap shrink-0 py-2"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-[#57524A] hover:text-[#171614] underline underline-offset-4 decoration-[#D4CEC3] hover:decoration-[#9A7B3A] transition-colors whitespace-nowrap shrink-0 py-2"
             >
-              <span>View Google Maps Listing</span>
+              <span>Google Maps</span>
               <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
             </a>
           </div>
@@ -96,12 +120,16 @@ export function Hero({ onReserveClick, placeData }: HeroProps) {
 
       <div className="mt-10 lg:mt-12 grid grid-cols-2 lg:grid-cols-4 border-t border-b border-[#E5E2DC] divide-y sm:divide-y-0 sm:divide-x divide-[#E5E2DC]">
         {propertyMetrics.map((item) => (
-          <div key={item.label} className="py-5 px-4 sm:px-6 first:pl-0">
-            <div className="font-serif text-2xl sm:text-3xl font-medium text-[#171614] tabular-nums">
+          <Link
+            key={item.label}
+            to={item.to}
+            className="block py-5 px-4 sm:px-6 first:pl-0 hover:bg-[#F4F1EA]/60 transition-colors group"
+          >
+            <div className="font-serif text-2xl sm:text-3xl font-medium text-[#171614] group-hover:text-[#9A7B3A] transition-colors tabular-nums">
               {item.figure}
             </div>
             <div className="mt-1 text-sm text-[#6E675C]">{item.label}</div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

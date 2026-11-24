@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Check, X } from 'lucide-react';
 import {
   CurrencyCode,
@@ -16,6 +16,7 @@ interface AccommodationsProps {
   selectedRoomId: string;
   onSelectRoom: (roomId: string) => void;
   placePhotos: PlacePhotoItem[];
+  headerAction?: ReactNode;
 }
 
 type FilterOption = 'all' | 'executive' | 'standard';
@@ -26,6 +27,7 @@ export function Accommodations({
   selectedRoomId,
   onSelectRoom,
   placePhotos,
+  headerAction,
 }: AccommodationsProps) {
   const [filter, setFilter] = useState<FilterOption>('all');
   const [inspectingRoom, setInspectingRoom] = useState<{
@@ -41,10 +43,6 @@ export function Accommodations({
   const handleChooseRoom = (roomId: string) => {
     onSelectRoom(roomId);
     setInspectingRoom(null);
-    const reserveSection = document.getElementById('reserve');
-    if (reserveSection) {
-      reserveSection.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   return (
@@ -58,6 +56,7 @@ export function Accommodations({
           <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#171614] text-balance">
             Rooms proportioned for rest and quiet work.
           </h2>
+          {headerAction && <div className="pt-1">{headerAction}</div>}
         </div>
 
         <div className="flex flex-wrap items-center gap-4">

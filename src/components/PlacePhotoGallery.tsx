@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { LODGE_INFO } from '../data/lodgeData';
 import { PlacePhotoItem } from '../hooks/useLodgePlaceData';
@@ -8,12 +8,14 @@ interface PlacePhotoGalleryProps {
   photos: PlacePhotoItem[];
   isLoading: boolean;
   googleMapsUri: string | null;
+  secondaryAction?: ReactNode;
 }
 
 export function PlacePhotoGallery({
   photos,
   isLoading,
   googleMapsUri,
+  secondaryAction,
 }: PlacePhotoGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -71,15 +73,18 @@ export function PlacePhotoGallery({
           </h2>
         </div>
 
-        <a
-          href={googleMapsUri || LODGE_INFO.googleShareUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-[#171614] hover:text-[#8A6A28] underline underline-offset-4 decoration-[#D4CEC3] whitespace-nowrap shrink-0"
-        >
-          <span>View All on Google Maps</span>
-          <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-        </a>
+        <div className="flex flex-wrap items-center gap-5">
+          {secondaryAction}
+          <a
+            href={googleMapsUri || LODGE_INFO.googleShareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[#171614] hover:text-[#8A6A28] underline underline-offset-4 decoration-[#D4CEC3] whitespace-nowrap shrink-0"
+          >
+            <span>View All on Google Maps</span>
+            <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+          </a>
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-12 gap-6 items-start">
